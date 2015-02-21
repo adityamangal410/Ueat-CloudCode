@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "UeaT": {
+            "applicationId": "qL1dW1JQ8ScToEgtz5pnkYlCQEoHxtEKTwIDJc56", 
+            "masterKey": "2QRQHMl4tq2n6l2tKcv1XErOoIK86fyy0BcJpYUG"
+        }, 
+        "_default": {
+            "link": "UeaT"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.4"
+    }
+}
