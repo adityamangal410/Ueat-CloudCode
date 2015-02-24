@@ -1,4 +1,6 @@
 var _ = require('underscore');
+var moment = require('moment');
+var metadata = require('cloud/metadata.js');
 
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 // For example:
@@ -23,7 +25,7 @@ return Parse.Cloud.httpRequest({
     client_id : 'ZGXMWBZGHSGHWSCYQXLNYOEWP31N1RBKBNDZRV24E2AWDTXR',
     client_secret : 'QXCGOG0F4BILVX5JY0BNKMWIJLZJXYRVD5POZ1BZRHOZ0RLV',
     v : '20150219'
-  },
+  }
 }).then(function (httpResponse) {
 //    response.success(httpResponse.text);
   var locData = JSON.parse(httpResponse.text);
@@ -35,4 +37,8 @@ return Parse.Cloud.httpRequest({
 
 });
 
+});
+
+Parse.Cloud.define("getAndSaveCategories", function(request, response) {
+  metadata.getAndSaveCategories(request, response);
 });
