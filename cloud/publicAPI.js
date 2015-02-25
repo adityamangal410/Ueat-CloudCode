@@ -5,9 +5,22 @@ var _ = require('underscore');
 var moment = require('moment');
 
 function LocData(locData) {
-    this.name = locData.name;
-    this.vAddress = locData.location.formattedAddress;
-    this.vCategory = locData.categories[0].name;
+    var Venues = Parse.Object.extend("Venues");
+    var newVenue = new Venues();
+
+    newVenue.set("vName", locData.name);
+    newVenue.set("vAddress", locData.location.formattedAddress.join());
+    newVenue.set("vCategory", locData.categories[0].name);
+    newVenue.set("vContact", locData.contact.formattedPhone);
+    newVenue.set("vCheckinsCount", locData.stats.checkinsCount);
+    newVenue.set("vUsersCount", locData.stats.usersCount);
+    newVenue.set("vTipCount", locData.stats.tipCount);
+    newVenue.set("vUrl", locData.url);
+    newVenue.set("vLat", locData.location.lat);
+    newVenue.set("vLng", locData.location.lng);
+    newVenue.set("vTwitter", locData.contact.twitter);
+
+    return newVenue;
 }
 
 function getRestaurantCategories(chunk){
@@ -50,9 +63,25 @@ exports.searchFoursquareByLocation = function(request, response){
     }).then(function (httpResponse) {
         var locData = JSON.parse(httpResponse.text);
         _.each(locData.response.venues, function(selectedLoc) {
-            locList.push(new LocData(selectedLoc));
+            locList.push(LocData(selectedLoc));
         });
-        response.success(locList);
+
+        console.log(locList.length);
+        console.log('=======');
+        console.log(locData.response.venues.length);
+
+        //save all the newly created objects
+        Parse.Object.saveAll(locList, {
+            success: function() {
+                // objects have been saved...
+                console.log('All objects saved!');
+            },
+            error: function(error) {
+                // an error occurred...
+                console.log(error);
+            }
+        });
+        response.success();
     }, function(error){
         console.log(error);
     });
